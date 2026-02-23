@@ -1,4 +1,4 @@
-package com;
+package com.app.quantitymeasurement;
 
 public class QuantityMeasurementApp {
 	// Inner class representing Feet measurement

@@ -1,7 +1,9 @@
-package com;
+package com.app.quantitymeasurement;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+
+import com.app.quantitymeasurement.QuantityMeasurementApp;
 
 public class QuantityMeasurementAppTest {
 
