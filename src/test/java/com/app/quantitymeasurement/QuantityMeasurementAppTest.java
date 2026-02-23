@@ -3,84 +3,57 @@ package com.app.quantitymeasurement;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import com.app.quantitymeasurement.QuantityMeasurementApp;
-
 public class QuantityMeasurementAppTest {
 
-    //UC1 feet test cases
-    @Test
-    void testEquality_SameValue() {
-        QuantityMeasurementApp.Feet f1 = new QuantityMeasurementApp.Feet(1.0);
-        QuantityMeasurementApp.Feet f2 = new QuantityMeasurementApp.Feet(1.0);
-
-        assertTrue(f1.equals(f2), "1.0 ft should be equal to 1.0 ft");
+	@Test
+    void testEquality_FeetToFeet_SameValue() {
+        assertEquals(
+            new QuantityLength(1.0, LengthUnit.FEET),
+            new QuantityLength(1.0, LengthUnit.FEET)
+        );
     }
 
     @Test
-    void testEquality_DifferentValue() {
-        QuantityMeasurementApp.Feet f1 = new QuantityMeasurementApp.Feet(1.0);
-        QuantityMeasurementApp.Feet f2 = new QuantityMeasurementApp.Feet(2.0);
+    void testEquality_InchToInch_SameValue() {
+        assertEquals(
+            new QuantityLength(1.0, LengthUnit.INCH),
+            new QuantityLength(1.0, LengthUnit.INCH)
+        );
+    }
 
-        assertFalse(f1.equals(f2), "1.0 ft should not be equal to 2.0 ft");
+    @Test
+    void testEquality_InchToFeet_EquivalentValue() {
+        assertEquals(
+            new QuantityLength(12.0, LengthUnit.INCH),
+            new QuantityLength(1.0, LengthUnit.FEET)
+        );
+    }
+
+    @Test
+    void testEquality_FeetToFeet_DifferentValue() {
+        assertNotEquals(
+            new QuantityLength(1.0, LengthUnit.FEET),
+            new QuantityLength(2.0, LengthUnit.FEET)
+        );
     }
 
     @Test
     void testEquality_NullComparison() {
-        QuantityMeasurementApp.Feet f1 = new QuantityMeasurementApp.Feet(1.0);
-
-        assertFalse(f1.equals(null), "Comparison with null should return false");
-    }
-
-    @Test
-    void testEquality_NonNumericInput() {
-        QuantityMeasurementApp.Feet f1 = new QuantityMeasurementApp.Feet(1.0);
-
-        assertFalse(f1.equals("1.0"), "Feet should not be equal to non-numeric object");
+        QuantityLength q = new QuantityLength(1.0, LengthUnit.FEET);
+        assertNotEquals(q, null);
     }
 
     @Test
     void testEquality_SameReference() {
-        QuantityMeasurementApp.Feet f1 = new QuantityMeasurementApp.Feet(1.0);
-
-        assertTrue(f1.equals(f1), "Object must be equal to itself");
-    }
-
-  // UC2 inches test cases
-
-    @Test
-    void testInchesEquality_SameValue() {
-        QuantityMeasurementApp.Inches i1 = new QuantityMeasurementApp.Inches(1.0);
-        QuantityMeasurementApp.Inches i2 = new QuantityMeasurementApp.Inches(1.0);
-
-        assertTrue(i1.equals(i2), "1.0 inch should be equal to 1.0 inch");
+        QuantityLength q = new QuantityLength(1.0, LengthUnit.FEET);
+        assertEquals(q, q);
     }
 
     @Test
-    void testInchesEquality_DifferentValue() {
-        QuantityMeasurementApp.Inches i1 = new QuantityMeasurementApp.Inches(1.0);
-        QuantityMeasurementApp.Inches i2 = new QuantityMeasurementApp.Inches(2.0);
-
-        assertFalse(i1.equals(i2), "1.0 inch should not be equal to 2.0 inch");
-    }
-
-    @Test
-    void testInchesEquality_NullComparison() {
-        QuantityMeasurementApp.Inches i1 = new QuantityMeasurementApp.Inches(1.0);
-
-        assertFalse(i1.equals(null), "Inches compared with null should return false");
-    }
-
-    @Test
-    void testInchesEquality_NonNumericInput() {
-        QuantityMeasurementApp.Inches i1 = new QuantityMeasurementApp.Inches(1.0);
-
-        assertFalse(i1.equals(1), "Inches should not be equal to non-numeric object");
-    }
-
-    @Test
-    void testInchesEquality_SameReference() {
-        QuantityMeasurementApp.Inches i1 = new QuantityMeasurementApp.Inches(1.0);
-
-        assertTrue(i1.equals(i1), "Object must be equal to itself");
+    void testInvalidUnit() {
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> new QuantityLength(1.0, null)
+        );
     }
 }
