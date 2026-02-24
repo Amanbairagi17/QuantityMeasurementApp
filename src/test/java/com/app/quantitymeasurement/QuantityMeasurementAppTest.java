@@ -6,6 +6,115 @@ import org.junit.jupiter.api.Test;
 public class QuantityMeasurementAppTest {
 	
 	private static final double EPSILON = 0.0001;
+	 @Test
+	    public void testFeetEquality() {
+	    	QuantityLength feet1 = new QuantityLength(10.0, LengthUnit.FEET);
+	    	QuantityLength feet2 = new QuantityLength(10.0, LengthUnit.FEET);
+	    	
+	    	assertTrue(feet1.equals(feet2));
+	    }
+	    
+	    @Test
+	    public void testInchesEquality() {
+	    	QuantityLength inch1 = new QuantityLength(10.0, LengthUnit.INCHES);
+	    	QuantityLength inch2 = new QuantityLength(10.0, LengthUnit.INCHES);
+	    	
+	    	assertTrue(inch1.equals(inch2));
+	    }
+	    
+	    @Test
+	    public void testFeetInchesComparison() {
+	    	QuantityLength feet = new QuantityLength(1.0, LengthUnit.FEET);
+	    	QuantityLength inch = new QuantityLength(12.0, LengthUnit.INCHES);
+	    	
+	    	assertTrue(feet.equals(inch));
+		}
+	    
+	    @Test
+	    public void testFeetInequality() {
+	    	QuantityLength feet1 = new QuantityLength(10.0, LengthUnit.FEET);
+	    	QuantityLength feet2 = new QuantityLength(20.0, LengthUnit.FEET);
+	    	
+	    	assertFalse(feet1.equals(feet2));
+	    }
+	    
+	    @Test
+	    public void testInchesInequality() {
+	    	QuantityLength inch1 = new QuantityLength(10.0, LengthUnit.INCHES);
+	    	QuantityLength inch2 = new QuantityLength(20.0, LengthUnit.INCHES);
+	    	
+	    	assertFalse(inch1.equals(inch2));
+	    }
+	    
+	    @Test
+	    public void testCrossUnitInequality() {
+	    	QuantityLength feet = new QuantityLength(24.0, LengthUnit.FEET);
+	    	QuantityLength inch = new QuantityLength(1.0, LengthUnit.INCHES);
+	    	
+	    	assertFalse(feet.equals(inch));
+		}
+	    
+	    @Test
+	    public void testMultipleFeetComparison() {
+	    	QuantityLength feet = new QuantityLength(3.0, LengthUnit.FEET);
+	    	QuantityLength inch = new QuantityLength(36.0, LengthUnit.INCHES);
+
+	        assertTrue(feet.equals(inch));
+	    }
+	    
+	    @Test 
+	    public void yardEquals36Inches() {
+	    	QuantityLength yard = new QuantityLength(1.0, LengthUnit.YARDS);
+	    	QuantityLength inches = new QuantityLength(36.0, LengthUnit.INCHES);
+	    	
+	    	assertTrue(yard.equals(inches));
+	    }
+	    
+	    @Test
+	    public void centimeterEquals39Point3701Inches() {
+	    	QuantityLength centimeter = new QuantityLength(100.0, LengthUnit.CENTIMETERS);
+	    	QuantityLength inches = new QuantityLength(39.37, LengthUnit.INCHES);
+	    	
+	    	assertTrue(centimeter.equals(inches));
+	    }
+	    
+	    @Test
+	    public void threeFeetEqualsOneYard() {
+	    	QuantityLength feet = new QuantityLength(3.0, LengthUnit.FEET);
+	    	QuantityLength yard = new QuantityLength(1.0, LengthUnit.YARDS);
+
+	        assertTrue(feet.equals(yard));
+	    }
+
+	    @Test
+	    public void thirtyPoint48CmEqualsOneFoot() {
+	    	QuantityLength centimeter = new QuantityLength(30.48, LengthUnit.CENTIMETERS);
+	    	QuantityLength foot = new QuantityLength(1.0, LengthUnit.FEET);
+
+	        assertTrue(centimeter.equals(foot));
+	    }
+
+	    @Test
+	    public void yardNotEqualToInches() {
+	    	QuantityLength yard = new QuantityLength(1.0, LengthUnit.YARDS);
+	    	QuantityLength inches = new QuantityLength(10.0, LengthUnit.INCHES);
+
+	        assertFalse(yard.equals(inches));
+	    }
+
+	    @Test
+	    public void referenceEqualitySameObject() {
+	    	QuantityLength length = new QuantityLength(10.0, LengthUnit.FEET);
+
+	        assertTrue(length.equals(length));
+	    }
+
+	    @Test
+	    public void equalsReturnsFalseForNull() {
+	    	QuantityLength length = new QuantityLength(10.0, LengthUnit.FEET);
+
+	        assertFalse(length.equals(null));
+	    }
 	
 	@Test
     void testFeetConversionFactor() {
