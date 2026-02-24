@@ -79,7 +79,7 @@ public final class QuantityLength {
 
         return new QuantityLength(resultValue, targetUnit);
     }
-
+    
 
     @Override
     public boolean equals(Object obj) {
