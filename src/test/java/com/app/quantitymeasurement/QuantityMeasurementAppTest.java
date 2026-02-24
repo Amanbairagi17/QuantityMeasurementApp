@@ -3,100 +3,134 @@ package com.app.quantitymeasurement;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-public class QuantityMeasurementAppTest {
+class QuantityMeasurementAppTest {
 
-	@Test
-    void testEquality_FeetToFeet_SameValue() {
-        assertEquals(
-            new QuantityLength(1.0, LengthUnit.FEET),
-            new QuantityLength(1.0, LengthUnit.FEET)
-        );
-    }
+    private static final double EPSILON = 1e-6;
 
+    //  Same-unit conversion
     @Test
-    void testEquality_InchToInch_SameValue() {
-        assertEquals(
-            new QuantityLength(1.0, LengthUnit.INCH),
-            new QuantityLength(1.0, LengthUnit.INCH)
-        );
+    void testConvert_FeetToFeet() {
+        assertEquals(5.0,
+                QuantityLength.convert(5.0, LengthUnit.FEET, LengthUnit.FEET),
+                EPSILON);
     }
 
+    //  Feet to Inches
     @Test
-    void testEquality_InchToFeet_EquivalentValue() {
-        assertEquals(
-            new QuantityLength(12.0, LengthUnit.INCH),
-            new QuantityLength(1.0, LengthUnit.FEET)
-        );
+    void testConvert_FeetToInches() {
+        assertEquals(12.0,
+                QuantityLength.convert(1.0, LengthUnit.FEET, LengthUnit.INCHES),
+                EPSILON);
     }
 
+    // Inches to Feet
     @Test
-    void testEquality_FeetToFeet_DifferentValue() {
-        assertNotEquals(
-            new QuantityLength(1.0, LengthUnit.FEET),
-            new QuantityLength(2.0, LengthUnit.FEET)
-        );
+    void testConvert_InchesToFeet() {
+        assertEquals(2.0,
+                QuantityLength.convert(24.0, LengthUnit.INCHES, LengthUnit.FEET),
+                EPSILON);
     }
 
+    //  Yards to Feet
     @Test
-    void testEquality_NullComparison() {
-        QuantityLength q = new QuantityLength(1.0, LengthUnit.FEET);
-        assertNotEquals(q, null);
+    void testConvert_YardsToFeet() {
+        assertEquals(6.0,
+                QuantityLength.convert(2.0, LengthUnit.YARDS, LengthUnit.FEET),
+                EPSILON);
     }
 
+    // Feet to Yards
     @Test
-    void testEquality_SameReference() {
-        QuantityLength q = new QuantityLength(1.0, LengthUnit.FEET);
-        assertEquals(q, q);
+    void testConvert_FeetToYards() {
+        assertEquals(2.0,
+                QuantityLength.convert(6.0, LengthUnit.FEET, LengthUnit.YARDS),
+                EPSILON);
     }
 
+    //  Yards to Inches
     @Test
-    void testInvalidUnit() {
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> new QuantityLength(1.0, null)
-        );
+    void testConvert_YardsToInches() {
+        assertEquals(36.0,
+                QuantityLength.convert(1.0, LengthUnit.YARDS, LengthUnit.INCHES),
+                EPSILON);
     }
-        
-        @Test
-        void testEquality_YardToFeet() {
-            assertEquals(
-                new QuantityLength(1.0, LengthUnit.YARDS),
-                new QuantityLength(3.0, LengthUnit.FEET)
-            );
-        }
 
-        @Test
-        void testEquality_YardToInches() {
-            assertEquals(
-                new QuantityLength(1.0, LengthUnit.YARDS),
-                new QuantityLength(36.0, LengthUnit.INCH)
-            );
-        }
+    //  Inches to Yards
+    @Test
+    void testConvert_InchesToYards() {
+        assertEquals(2.0,
+                QuantityLength.convert(72.0, LengthUnit.INCHES, LengthUnit.YARDS),
+                EPSILON);
+    }
 
-        @Test
-        void testEquality_CentimeterToInch() {
-            assertEquals(
-                new QuantityLength(1.0, LengthUnit.CENTIMETERS),
-                new QuantityLength(0.393701, LengthUnit.INCH)
-            );
-        }
+    //  Centimeters to Inches
+    @Test
+    void testConvert_CentimetersToInches() {
+        assertEquals(1.0,
+                QuantityLength.convert(2.54, LengthUnit.CENTIMETERS, LengthUnit.INCHES),
+                EPSILON);
+    }
 
-        @Test
-        void testEquality_MultiUnit_Transitive() {
-            QuantityLength a = new QuantityLength(1.0, LengthUnit.YARDS);
-            QuantityLength b = new QuantityLength(3.0, LengthUnit.FEET);
-            QuantityLength c = new QuantityLength(36.0, LengthUnit.INCH);
+    //  Zero value conversion
+    @Test
+    void testConvert_ZeroValue() {
+        assertEquals(0.0,
+                QuantityLength.convert(0.0, LengthUnit.FEET, LengthUnit.INCHES),
+                EPSILON);
+    }
 
-            assertEquals(a, b);
-            assertEquals(b, c);
-            assertEquals(a, c);
-        }
+    //Negative value conversion
+    @Test
+    void testConvert_NegativeValue() {
+        assertEquals(-12.0,
+                QuantityLength.convert(-1.0, LengthUnit.FEET, LengthUnit.INCHES),
+                EPSILON);
+    }
 
-        @Test
-        void testEquality_NonEquivalent() {
-            assertNotEquals(
-                new QuantityLength(1.0, LengthUnit.CENTIMETERS),
-                new QuantityLength(1.0, LengthUnit.FEET)
-            );
+    // Round-trip conversion
+    @Test
+    void testConvert_RoundTrip() {
+        double value = 5.5;
+        double inches = QuantityLength.convert(value, LengthUnit.FEET, LengthUnit.INCHES);
+        double feet = QuantityLength.convert(inches, LengthUnit.INCHES, LengthUnit.FEET);
+
+        assertEquals(value, feet, EPSILON);
+    }
+
+    //  Instance method conversion
+    @Test
+    void testInstanceConvertTo() {
+        QuantityLength length = new QuantityLength(1.0, LengthUnit.YARDS);
+        QuantityLength converted = length.convertTo(LengthUnit.FEET);
+
+        assertEquals(new QuantityLength(3.0, LengthUnit.FEET), converted);
+    }
+
+    //  Null source unit
+    @Test
+    void testConvert_NullSourceUnit_ThrowsException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> QuantityLength.convert(1.0, null, LengthUnit.FEET));
+    }
+
+    //  Null target unit
+    @Test
+    void testConvert_NullTargetUnit_ThrowsException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> QuantityLength.convert(1.0, LengthUnit.FEET, null));
+    }
+
+    // NaN value
+    @Test
+    void testConvert_NaNValue_ThrowsException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> QuantityLength.convert(Double.NaN, LengthUnit.FEET, LengthUnit.INCHES));
+    }
+
+    // Infinite value
+    @Test
+    void testConvert_InfiniteValue_ThrowsException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> QuantityLength.convert(Double.POSITIVE_INFINITY, LengthUnit.FEET, LengthUnit.INCHES));
     }
 }
