@@ -121,7 +121,7 @@ Extended equality logic to support `Inches` alongside `Feet`.
 
 # UC3 – Generic Quantity Class (DRY Refactor)
 
-**Date:** 2026-02-23
+**Date:** 2026-02-21
 
 ## Overview
 Refactored duplicate classes into a single `QuantityLength` class.
