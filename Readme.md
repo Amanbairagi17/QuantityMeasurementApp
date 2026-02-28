@@ -218,7 +218,7 @@ Enhanced addition logic to support explicit target unit specification.
 
 # UC8 – Standalone LengthUnit Refactor
 
-**Date:** 2026-02-23  
+**Date:** 2026-02-24
 
 ## Overview
 Extracted `LengthUnit` into standalone enum with conversion responsibility.
