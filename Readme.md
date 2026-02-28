@@ -218,7 +218,7 @@ Enhanced addition logic to support explicit target unit specification.
 
 # UC8 – Standalone LengthUnit Refactor
 
-**Date:** 2026-02-23  
+**Date:** 2026-02-24 
 
 ## Overview
 Extracted `LengthUnit` into standalone enum with conversion responsibility.
@@ -244,7 +244,7 @@ Extracted `LengthUnit` into standalone enum with conversion responsibility.
 
 # UC9 – Weight Category Integration
 
-**Date:** 2026-02-23  
+**Date:** 2026-02-24  
 
 ## Overview
 Introduced new measurement category: Weight.
@@ -264,7 +264,7 @@ Introduced new measurement category: Weight.
 
 # UC10 – Generic Quantity<U> with IMeasurable
 
-**Date:** 2026-02-23  
+**Date:** 2026-02-25 
 
 ## Overview
 Refactored entire system into a single generic `Quantity<U>` class.
