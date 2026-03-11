@@ -3,6 +3,12 @@ package com.app.quantitymeasurement;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import com.quantitymeasurement.app.Quantity;
+import com.quantitymeasurement.units.LengthUnit;
+import com.quantitymeasurement.units.TemperatureUnit;
+import com.quantitymeasurement.units.VolumeUnit;
+import com.quantitymeasurement.units.WeightUnit;
+
 public class QuantityMeasurementAppTest {
 	    private static final double EPS = 0.00001;
 
@@ -699,6 +705,167 @@ public class QuantityMeasurementAppTest {
 	        assertThrows(IllegalArgumentException.class, () -> {
 	            ten.divide(zero);
 	        });
+	    }
+	    
+	    @Test
+	    void testCelsiusEqualsFahrenheit() {
+	        Quantity<TemperatureUnit> c =
+	                new Quantity<>(0.0, TemperatureUnit.CELSIUS);
+
+	        Quantity<TemperatureUnit> f =
+	                new Quantity<>(32.0, TemperatureUnit.FAHRENHEIT);
+
+	        assertEquals(c, f);
+	    }
+
+	    @Test
+	    void testCelsiusEqualsKelvin() {
+	        Quantity<TemperatureUnit> c =
+	                new Quantity<>(0.0, TemperatureUnit.CELSIUS);
+
+	        Quantity<TemperatureUnit> k =
+	                new Quantity<>(273.15, TemperatureUnit.KELVIN);
+
+	        assertEquals(c, k);
+	    }
+
+	    @Test
+	    void testNegativeFortyEquality() {
+	        Quantity<TemperatureUnit> c =
+	                new Quantity<>(-40.0, TemperatureUnit.CELSIUS);
+
+	        Quantity<TemperatureUnit> f =
+	                new Quantity<>(-40.0, TemperatureUnit.FAHRENHEIT);
+
+	        assertEquals(c, f);
+	    }
+
+	    @Test
+	    void testDifferentTemperatureNotEqual() {
+	        Quantity<TemperatureUnit> t1 =
+	                new Quantity<>(50.0, TemperatureUnit.CELSIUS);
+
+	        Quantity<TemperatureUnit> t2 =
+	                new Quantity<>(100.0, TemperatureUnit.CELSIUS);
+
+	        assertNotEquals(t1, t2);
+	    }
+
+	    // Conversion Tests
+	    @Test
+	    void testCelsiusToFahrenheit() {
+	        Quantity<TemperatureUnit> c =
+	                new Quantity<>(100.0, TemperatureUnit.CELSIUS);
+
+	        double result = c.convertTo(TemperatureUnit.FAHRENHEIT);
+
+	        assertEquals(212.0, result, EPS);
+	    }
+
+	    @Test
+	    void testFahrenheitToCelsius() {
+	        Quantity<TemperatureUnit> f =
+	                new Quantity<>(32.0, TemperatureUnit.FAHRENHEIT);
+
+	        double result = f.convertTo(TemperatureUnit.CELSIUS);
+
+	        assertEquals(0.0, result, EPS);
+	    }
+
+	    @Test
+	    void testCelsiusToKelvin() {
+	        Quantity<TemperatureUnit> c =
+	                new Quantity<>(0.0, TemperatureUnit.CELSIUS);
+
+	        double result = c.convertTo(TemperatureUnit.KELVIN);
+
+	        assertEquals(273.15, result, EPS);
+	    }
+
+	    @Test
+	    void testKelvinToCelsius() {
+	        Quantity<TemperatureUnit> k =
+	                new Quantity<>(273.15, TemperatureUnit.KELVIN);
+
+	        double result = k.convertTo(TemperatureUnit.CELSIUS);
+
+	        assertEquals(0.0, result, EPS);
+	    }
+
+	    @Test
+	    void testRoundTripConversion() {
+	        Quantity<TemperatureUnit> original =
+	                new Quantity<>(50.0, TemperatureUnit.CELSIUS);
+
+	        double fahrenheit =
+	                original.convertTo(TemperatureUnit.FAHRENHEIT);
+
+	        Quantity<TemperatureUnit> temp =
+	                new Quantity<>(fahrenheit, TemperatureUnit.FAHRENHEIT);
+
+	        double backToCelsius =
+	                temp.convertTo(TemperatureUnit.CELSIUS);
+
+	        assertEquals(50.0, backToCelsius, EPS);
+	    }
+
+	    // Edge Cases
+	    @Test
+	    void testAbsoluteZero() {
+	        Quantity<TemperatureUnit> c =
+	                new Quantity<>(-273.15, TemperatureUnit.CELSIUS);
+
+	        double kelvin =
+	                c.convertTo(TemperatureUnit.KELVIN);
+
+	        assertEquals(0.0, kelvin, EPS);
+	    }
+
+	    @Test
+	    void testLargeTemperature() {
+	        Quantity<TemperatureUnit> c =
+	                new Quantity<>(1000.0, TemperatureUnit.CELSIUS);
+
+	        double f =
+	                c.convertTo(TemperatureUnit.FAHRENHEIT);
+
+	        assertEquals(1832.0, f, EPS);
+	    }
+
+	    // Cross Category Safety
+	    @Test
+	    void testTemperatureNotEqualToLength() {
+	        Quantity<TemperatureUnit> t =
+	                new Quantity<>(100.0, TemperatureUnit.CELSIUS);
+
+	        Quantity<LengthUnit> l =
+	                new Quantity<>(100.0, LengthUnit.FEET);
+
+	        assertNotEquals(t, l);
+	    }
+
+	    @Test
+	    void testTemperatureNotEqualToWeight() {
+	        Quantity<TemperatureUnit> t =
+	                new Quantity<>(50.0, TemperatureUnit.CELSIUS);
+
+	        Quantity<WeightUnit> w =
+	                new Quantity<>(50.0, WeightUnit.KILOGRAM);
+
+	        assertNotEquals(t, w);
+	    }
+
+	    // Validation Tests
+	    @Test
+	    void testNullUnitThrows() {
+	        assertThrows(IllegalArgumentException.class,
+	                () -> new Quantity<>(100.0, null));
+	    }
+
+	    @Test
+	    void testInvalidNumericValueThrows() {
+	        assertThrows(IllegalArgumentException.class,
+	                () -> new Quantity<>(Double.NaN, TemperatureUnit.CELSIUS));
 	    }
 	    
 }
