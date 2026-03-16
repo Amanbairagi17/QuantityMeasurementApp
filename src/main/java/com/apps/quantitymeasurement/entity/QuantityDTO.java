@@ -1,99 +1,102 @@
 package com.apps.quantitymeasurement.entity;
 
-/**
- * Data Transfer Object used for transferring quantity data
- * between Controller and Service layers.
- */
+
+interface IMeasurableUnit{
+	public String getUnitName();
+	public String getMeasurementType();
+}
 public class QuantityDTO {
-    private double value;
-    private IMeasurableUnit unit;
+	
+	enum LengthUnit implements IMeasurableUnit{
+		FEET, INCHES, YARDS, CENTIMETERS;
+		
+		@Override
+		public String getUnitName() {
+			return this.name();
+		}
+		
+		@Override
+		public String getMeasurementType() {
+			return this.getClass().getSimpleName();
+		}
+	}
+	
+	enum VolumeUnit implements IMeasurableUnit{
+		LITRE, MILLILETRE,GALLON;
 
-    public QuantityDTO(double value, IMeasurableUnit unit) {
-        this.value = value;
-        this.unit = unit;
-    }
+		@Override
+		public String getUnitName() {
+			// TODO Auto-generated method stub
+			return this.name();
+		}
 
-    public double getValue() {
-        return value;
-    }
+		@Override
+		public String getMeasurementType() {
+			// TODO Auto-generated method stub
+			return this.getClass().getSimpleName();
+		}
+	}
+	
+	enum WeightUnit implements IMeasurableUnit{
+		KILOGRAM, GRAM, POUND;
 
-    public IMeasurableUnit getUnit() {
-        return unit;
-    }
+		@Override
+		public String getUnitName() {
+			// TODO Auto-generated method stub
+			return this.name();
+		}
 
-    // Interface representing measurable units for DTO layer
-    public interface IMeasurableUnit {
-        String getUnitName();
-        String getMeasurementType();
-    }
+		@Override
+		public String getMeasurementType() {
+			// TODO Auto-generated method stub
+			return this.getClass().getSimpleName();
+		}
+	}
+	
+	enum TemperatureUnit implements IMeasurableUnit{
+		CELSIUS, FAHRENHEIT;
 
-    // Length Units
-    public enum LengthUnit implements IMeasurableUnit {
-        FEET,
-        INCHES,
-        YARDS,
-        CENTIMETERS;
+		@Override
+		public String getUnitName() {
+			// TODO Auto-generated method stub
+			return this.name();
+		}
 
-        @Override
-        public String getUnitName() {
-            return this.name();
-        }
+		@Override
+		public String getMeasurementType() {
+			// TODO Auto-generated method stub
+			return this.getClass().getName();
+		}
+	}
+	
+	private double value;
+	private String unit;
+	private String measurementType;
+	
+	public QuantityDTO(double value, String unit, String measurementType){
+		this.value = value;
+		this.unit = unit;
+		this.measurementType = measurementType;
+	}
 
-        @Override
-        public String getMeasurementType() {
-            return this.getClass().getSimpleName();
-        }
-    }
+	public double getValue() {
+		return value;
+	}
 
-    // Weight Units
-    public enum WeightUnit implements IMeasurableUnit {
-        MILLIGRAM,
-        GRAM,
-        KILOGRAM,
-        POUND,
-        TONNE;
+	public String getUnit() {
+		return unit;
+	}
 
-        @Override
-        public String getUnitName() {
-            return this.name();
-        }
+	public String getMeasurementType() {
+		return measurementType;
+	}
 
-        @Override
-        public String getMeasurementType() {
-            return this.getClass().getSimpleName();
-        }
-    }
-
-    // Volume Units
-    public enum VolumeUnit implements IMeasurableUnit {
-        LITRE,
-        MILLILITRE,
-        GALLON;
-
-        @Override
-        public String getUnitName() {
-            return this.name();
-        }
-
-        @Override
-        public String getMeasurementType() {
-            return this.getClass().getSimpleName();
-        }
-    }
-
-    // Temperature Units
-    public enum TemperatureUnit implements IMeasurableUnit {
-        CELSIUS,
-        FAHRENHEIT;
-
-        @Override
-        public String getUnitName() {
-            return this.name();
-        }
-
-        @Override
-        public String getMeasurementType() {
-            return this.getClass().getSimpleName();
-        }
-    }
+	@Override
+	public String toString() {
+		return "QuantityDTO [value=" + value + ", unit=" + unit + ", measurementType=" + measurementType + "]";
+	}
+	
+	public static void main(String[] args) {
+		
+	}
 }

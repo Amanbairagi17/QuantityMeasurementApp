@@ -1,41 +1,26 @@
 package com.apps.quantitymeasurement.unit;
 
+
 @FunctionalInterface
-interface SupportsArithmetic {
-    boolean isSupported();
+interface SupportsArithmetic{
+	boolean isSupported();
 }
 
 public interface IMeasurable {
-
-    SupportsArithmetic supportsArithmetic = () -> true;
-
-    String getUnitName();
-
-    double getConversionFactor();
-
-    double convertToBaseUnit(double value);
-
-    double convertFromBaseUnit(double baseValue);
-
-    default boolean supportsArithmetic() {
-        return supportsArithmetic.isSupported();
-    }
-
-    default void validateOperationSupport(String operation) {
-    }
-
-    default String getMeasurementType() {
-        return this.getClass().getSimpleName();
-    }
-
-    static IMeasurable getUnitInstance(String unitName, Class<?> enumClass) {
-        for (Object constant : enumClass.getEnumConstants()) {
-            IMeasurable unit = (IMeasurable) constant;
-
-            if (unit.getUnitName().equalsIgnoreCase(unitName)) {
-                return unit;
-            }
-        }
-        throw new IllegalArgumentException("Invalid unit: " + unitName);
-    }
+	double getConversionFactor();
+	double convertToBaseUnit(double value);
+	double convertFromBaseUnit(double baseValue);
+	String getUnitName();
+	public String getMeasurementType();
+	public IMeasurable getUnitInstance(String untiName);
+	
+	default boolean supportsArithmetic() {
+		return true;
+	}
+	
+	default void validateOperationSupport(String operation) {
+		if(!supportsArithmetic()) {
+			throw new UnsupportedOperationException(getUnitName()+ "category does not support "+ operation );
+		}
+	}
 }

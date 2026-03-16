@@ -1,71 +1,49 @@
 package com.apps.quantitymeasurement.unit;
-
 import java.util.function.Function;
 
 public enum TemperatureUnit implements IMeasurable {
-    CELSIUS(false),
-    FAHRENHEIT(true);
-
-    private final boolean isFahrenheit;
-
-    final Function<Double, Double> FAHRENHEIT_TO_CELSIUS = (fahrenheit) -> (fahrenheit - 32) * 5 / 9;
-
-    final Function<Double, Double> CELSIUS_TO_CELSIUS = (celsius) -> celsius;
-
-    Function<Double, Double> conversionValue;
-
-    SupportsArithmetic supportsArithmetic = () -> false;
-
-    TemperatureUnit(boolean isFahrenheit) {
-        this.isFahrenheit = isFahrenheit;
-
-        if (isFahrenheit) conversionValue = FAHRENHEIT_TO_CELSIUS;
-        else conversionValue = CELSIUS_TO_CELSIUS;
-    }
-
-    @Override
-    public String getUnitName() {
-        return name();
-    }
-
-    @Override
-    public double getConversionFactor() {
-        return 1.0;
-    }
-
-    @Override
+	CELSIUS(val -> val, val->val),
+	FAHRENHEIT(c->(c*9/5)+32, f->(f-32)*5/9);
+	
+	private final Function<Double, Double> fromBase;
+	private final Function<Double, Double> toBase;
+	
+	TemperatureUnit(Function<Double, Double> fromBase, Function<Double, Double> toBase){
+		this.fromBase = fromBase;
+		this.toBase = toBase;
+	}
+	@Override
     public double convertToBaseUnit(double value) {
-        return conversionValue.apply(value);
+        return toBase.apply(value);
     }
 
-    @Override
-    public double convertFromBaseUnit(double baseValue) {
-        if (isFahrenheit) return (baseValue * 9 / 5) + 32;
-
-        return baseValue;
+    public double convertFromBaseUnit(double value) {
+        return fromBase.apply(value);
     }
 
     @Override
     public boolean supportsArithmetic() {
-        return supportsArithmetic.isSupported();
+        return false; // Temperature units do not support add/sub/div
     }
 
     @Override
-    public void validateOperationSupport(String operation) {
-        if (!supportsArithmetic.isSupported()) {
-        	String message = this.name() + " does not support " + operation + " operations.";
-            throw new UnsupportedOperationException(message);
-        }
-    }
-
-    public String getMeasurementType() {
-        return this.getClass().getSimpleName();
-    }
-
-    public static IMeasurable getUnitInstance(String unitName) {
-        for (TemperatureUnit unit : TemperatureUnit.values()) {
-            if (unit.name().equalsIgnoreCase(unitName)) return unit;
-        }
-        throw new IllegalArgumentException("Invalid temperature unit: " + unitName);
-    }
+    public double getConversionFactor() { return 1.0; } // Not used for non-linear
+    
+    @Override
+    public String getUnitName() { return this.name(); }
+	@Override
+	public String getMeasurementType() {
+		// TODO Auto-generated method stub
+		return this.getClass().getSimpleName();
+	}
+	@Override
+	public IMeasurable getUnitInstance(String unitName) {
+		for(TemperatureUnit unit: TemperatureUnit.values()) {
+			if(unit.getUnitName().equalsIgnoreCase(unitName)) {
+				return unit;
+			}
+		}
+		throw new IllegalArgumentException("Invalid temperature unit: "+ unitName);
+	}
+	
 }

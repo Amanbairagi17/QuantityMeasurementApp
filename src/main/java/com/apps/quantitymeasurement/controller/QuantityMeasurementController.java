@@ -1,43 +1,42 @@
 package com.apps.quantitymeasurement.controller;
 
 import com.apps.quantitymeasurement.entity.QuantityDTO;
-import com.apps.quantitymeasurement.exception.QuantityMeasurementException;
-import com.apps.quantitymeasurement.service.IQuantityMeasurementService;
+import com.apps.quantitymeasurement.repository.IQuantityMeasurementRepository;
+import com.apps.quantitymeasurement.repository.QuantityMeasurementCacheRepository;
+import com.apps.quantitymeasurement.services.*;
 
 public class QuantityMeasurementController {
-    private IQuantityMeasurementService service;
-
-    public QuantityMeasurementController(IQuantityMeasurementService service) {
-        this.service = service;
-    }
-
-    public boolean performCompare(QuantityDTO q1, QuantityDTO q2) {
-    	boolean result = service.compare(q1, q2);
-        System.out.println("Comparison Result: " + (result ? "Equal" : "Not Equal"));
-        return result;
-    }
-
-    public QuantityDTO performConvert(QuantityDTO quantity, String targetUnit) {
-    	QuantityDTO result = service.convert(quantity, targetUnit);
-        System.out.println("Converted Result: " + result.getValue() + " " + result.getUnit().getUnitName());
-        return result;
-    }
-
-    public QuantityDTO performAdd(QuantityDTO q1, QuantityDTO q2) {
-    	QuantityDTO result = service.add(q1, q2);
-        System.out.println("Addition Result: " + result.getValue() + " " + result.getUnit().getUnitName());
-        return result;
-    }
-
-    public QuantityDTO performSubtract(QuantityDTO q1, QuantityDTO q2) {
-    	QuantityDTO result = service.subtract(q1, q2);
-        System.out.println("Subtraction Result: " + result.getValue() + " " + result.getUnit().getUnitName());
-        return result;
-    }
-
-    public double performDivide(QuantityDTO q1, QuantityDTO q2) {
-    	double result = service.divide(q1, q2);
-        System.out.println("Division Result: " + result);
-        return result;
-    }
+	private IQuantityMeasurementService quantityMeasurementService;
+	
+	public QuantityMeasurementController(
+			IQuantityMeasurementService quantityMeasurementService) {
+		this.quantityMeasurementService = quantityMeasurementService;
+	}
+	
+	public boolean performComparison(QuantityDTO thisQuantityDTO, QuantityDTO thatQuantityDTO) {
+		return quantityMeasurementService.compare(thisQuantityDTO, thatQuantityDTO);
+	}
+	
+	public QuantityDTO performConversion(QuantityDTO thisQuantityDTO, QuantityDTO thatQuantityDTO) {
+		return quantityMeasurementService.convert(thisQuantityDTO, thatQuantityDTO);
+	}
+	
+	public QuantityDTO performAddition(QuantityDTO thisQuantity, QuantityDTO thatQuantity) {
+		return quantityMeasurementService.add(thisQuantity, thatQuantity);
+	}
+	
+	public QuantityDTO performAddition(QuantityDTO thisQuantity, QuantityDTO thatQuantity, 
+			QuantityDTO targetQuantity) {
+		return quantityMeasurementService.add(thisQuantity, thatQuantity, targetQuantity);
+	}
+	public QuantityDTO performSubtraction(QuantityDTO thisQuantity, QuantityDTO thatQuantity) {
+		return quantityMeasurementService.subtract(thisQuantity, thatQuantity);
+	}
+	public QuantityDTO performSubtraction(QuantityDTO thisQuantity, QuantityDTO thatQuantity, QuantityDTO targetQuantity) {
+		return quantityMeasurementService.subtract(thisQuantity, thatQuantity, targetQuantity);
+	}
+	
+	public double performDivision(QuantityDTO thisQuantityDTO, QuantityDTO thatQuantityDTO) {
+		return quantityMeasurementService.divide(thisQuantityDTO, thatQuantityDTO);
+	}
 }
