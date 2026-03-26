@@ -11,10 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.javapoet.ClassName;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,11 +19,10 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/quantities")
+@Slf4j
 @Tag(name = "Quantity Measurements", description = "REST API for quantity measurement operations")
 public class QuantityMeasurementController {
     private final IQuantityMeasurementService service;
-
-    private static final Logger log = LoggerFactory.getLogger(ClassName.class);
 
     @PostMapping("/compare")
     @Operation(summary = "Compare two quantities")

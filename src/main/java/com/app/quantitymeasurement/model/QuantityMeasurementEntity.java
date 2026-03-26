@@ -14,9 +14,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
-
 @Table(name = "quantity_measurement_entity", indexes = {
         @Index(name = "idx_operation", columnList = "operation"),
         @Index(name = "idx_measurement_type", columnList = "this_measurement_type"),

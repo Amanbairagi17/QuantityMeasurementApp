@@ -1,21 +1,16 @@
 package com.app.quantitymeasurement.exception;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.app.quantitymeasurement.Application;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.javapoet.ClassName;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import com.app.quantitymeasurement.Application;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 
 class ErrorResponse{
 	public LocalDateTime timeStamp;
@@ -25,6 +20,7 @@ class ErrorResponse{
 	public String path;
 }
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -33,9 +29,6 @@ public class GlobalExceptionHandler {
     GlobalExceptionHandler(Application application) {
         this.application = application;
     }
-
-	private static final Logger log = LoggerFactory.getLogger(ClassName .class);
-
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,
 			WebRequest request) {
@@ -56,6 +49,22 @@ public class GlobalExceptionHandler {
 		 
 		 return ResponseEntity.badRequest().body(errorResponse);
 	}
+
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex,
+																	 WebRequest request) {
+		log.info(ex.getMessage());
+
+		ErrorResponse errorResponse = new ErrorResponse();
+
+		errorResponse.timeStamp = LocalDateTime.now();
+		errorResponse.status = HttpStatus.BAD_REQUEST.value();
+		errorResponse.error = "Quantity measurement error";
+		errorResponse.message = ex.getMessage();
+		errorResponse.path = request.getDescription(false).replace("uri=", "");
+
+		return ResponseEntity.badRequest().body(errorResponse);
+	}
 	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> handleException(Exception ex, WebRequest request) {
@@ -64,7 +73,7 @@ public class GlobalExceptionHandler {
 		
 		errorResponse.timeStamp = LocalDateTime.now();
 		errorResponse.status = HttpStatus.BAD_REQUEST.value();
-		errorResponse.error = "Quantity mesurement error";
+		errorResponse.error = "Quantity measurement error";
 		errorResponse.message = ex.getMessage();
 		errorResponse.path = request.getDescription(false).replace("uri=", "");
 		
