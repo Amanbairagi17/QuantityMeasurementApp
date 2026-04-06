@@ -1,19 +1,19 @@
 spring:
-  application:
-    name: quantity-service
-
   boot:
     admin:
       client:
         url: http://localhost:9090
 
   datasource:
-    url: ${DB_URL}
-    username: ${DB_NAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://localhost:3306/qma_db
+    username: root
+    password: Sql@0001
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
-server:
-  port: 8081
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 eureka:
   client:
@@ -21,5 +21,6 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
     register-with-eureka: true
     fetch-registry: true
+
   instance:
     prefer-ip-address: true

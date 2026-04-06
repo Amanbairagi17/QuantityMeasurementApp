@@ -1,25 +1,14 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: quantity-service
 
-  boot:
-    admin:
-      client:
-        url: http://localhost:9090
-
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_NAME}
-    password: ${DB_PASSWORD}
-
-server:
-  port: 8081
+  config:
+    import: optional:configserver:http://localhost:8082
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
-    register-with-eureka: true
-    fetch-registry: true
-  instance:
-    prefer-ip-address: true
