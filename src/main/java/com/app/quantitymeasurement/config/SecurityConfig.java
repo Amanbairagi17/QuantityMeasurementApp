@@ -68,7 +68,7 @@ public class SecurityConfig {
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
         corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000",
-                "http://quantity-measurement.s3-website.eu-north-1.amazonaws.com/auth",
+                "http://quantity-measurement.s3-website.eu-north-1.amazonaws.com",
                 "http://localhost:5500",
                 "http://127.0.0.1:3000",
                 "http://localhost:4200"));
