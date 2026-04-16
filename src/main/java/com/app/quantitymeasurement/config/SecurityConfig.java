@@ -63,21 +63,26 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         corsConfiguration.setAllowedHeaders(List.of("*"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE"));
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000",
-                "http://quantity-measurement.s3-website.eu-north-1.amazonaws.com",
-                "http://quantity-measurement.s3-website.eu-north-1.amazonaws.com/",
-                "http://localhost:5500",
-                "http://127.0.0.1:3000",
-                "http://localhost:4200"));
+        corsConfiguration.setAllowedMethods(
+                List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS")
+        );
+
+        corsConfiguration.setAllowedOrigins(List.of(
+                "http://localhost:4200",
+                "http://quantity-measurement.s3-website-eu-north-1.amazonaws.com"
+        ));
+
         corsConfiguration.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource
-                = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-        return urlBasedCorsConfigurationSource;
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration("/**", corsConfiguration);
+
+        return source;
     }
 }
